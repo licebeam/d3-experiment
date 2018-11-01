@@ -54,6 +54,7 @@ const Container = styled.div`
       background: blueviolet;
       color: white;
       transition: .2s all;
+      &:focus{outline: 0}
       &:hover{
         width: 110px;
         height: 50px;
@@ -114,7 +115,12 @@ class App extends Component {
       }) 
     }
   }
-
+  resetChart = () => {
+    this.setState({
+      fakeDataArr: [
+        1, 2, 3, 10, 20, 100, 1000, 25, 800,
+      ],})
+  }
   componentDidMount() {
     this.createBarChart();
   }
@@ -132,6 +138,7 @@ class App extends Component {
       <Container>
         <div className='button-container'>
           <button className='add-button' onClick={() => this.addItemToChart()}>Add Item</button>
+          <button className='add-button' onClick={() => this.resetChart()}>Reset</button>
         </div>
         
         <div className="App" />
