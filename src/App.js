@@ -5,16 +5,24 @@ import * as d3 from 'd3'; //import all of d3
 const Container = styled.div`
   background-color: white;
   height: 100vh;
+  background: linear-gradient(270deg, #dc64ff, #ffd364);
+  background-size: 400% 400%;
+  animation: AnimationName 30s ease infinite;
+  @keyframes AnimationName { 
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+  }
   .App{
     display: flex;
     color: white;
     font-size: .8rem;
     transform: scaleY(-1);
-    border: 2px solid black;
+    /* border: 2px solid white; */
     style-bar{
-      background-color: black;
+      background-color: blueviolet;
       flex: 1;
-      border: 1px solid white;
+      border: 1px solid darkblue;
       margin: 4px;
       transform: scaleY(-1);
       justify-content: middle;
@@ -24,7 +32,7 @@ const Container = styled.div`
     }
   }
    .data{
-      border: 2px solid black;
+      color: white;
       padding: 10px; 
       margin-top: 10px;
       text-align: center;
@@ -57,11 +65,11 @@ class App extends Component {
       .enter().append('style-bar')
       .style('height', (data) => { return bar(data) + 'px'; }) //the length of the bar chart.
       .on("mouseover", function () {
-        d3.select(this).style('background-color', 'red')
+        d3.select(this).style('background-color', 'orange')
           .text((data) => { return data; });
       })
       .on("mouseout", function () {
-        d3.select(this).style('background-color', 'black')
+        d3.select(this).style('background-color', 'blueviolet')
           .text(() => { return ''; });
       })
       .on("click", function (data) {
