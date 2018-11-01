@@ -73,7 +73,7 @@ class App extends Component {
     super(props)
     this.state = {
       fakeDataArr: [
-        1, 2, 3, 10, 20, 100, 1000, 25, 800,
+        100, 20, 80, 10, 20, 100, 1000, 25, 800,
       ],
       screenHeight: 100,
       currentData: null,
@@ -81,43 +81,59 @@ class App extends Component {
     }
   }
   createPieChart = () => {
-    var data = [10, 20, 100];
+    d3.select('.pie-chart').selectAll("svg").remove();
+    var data = this.state.fakeDataArr;
 
-    var width = 160,
-      height = 160,
+    var width = 460,
+      height = 460,
       radius = Math.min(width, height) / 2;
 
     var color = d3.scaleOrdinal()
-      .range(["#98abc5", "#8a89a6", "#7b6888"]);
+      .range(["white", "orange", "blueviolet", 'pink']);
 
     var arc = d3.arc()
-      .outerRadius(radius - 10)
-      .innerRadius(0);
+      .innerRadius(0)
+      .outerRadius(150 + 10);
+    
+    var arcOver = d3.arc()
+      .innerRadius(0)
+      .outerRadius(200);
 
     var labelArc = d3.arc()
-      .outerRadius(radius - 40)
-      .innerRadius(radius - 40);
+      .innerRadius(0)
+      .outerRadius(340);
 
     var pie = d3.pie()
       .sort(null)
       .value(function (d) { return d; });
 
     var svg = d3.select(".pie-chart").append("svg")
-      .attr("width", width)
+      .attr("width", width )
       .attr("height", height)
       .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    var g = svg.selectAll(".arc")
+    var group = svg.selectAll(".arc")
       .data(pie(data))
       .enter().append("g")
       .attr("class", "arc");
 
-    g.append("path")
+    group.append("path")
       .attr("d", arc)
-      .style("fill", function (d) { return color(d.data); });
+      .style("fill", function (d) { return color(d.data); })
+    .on("mouseover", function (d) {
+      d3.select(this).transition()
+        .duration(300)
+        .attr("d",arcOver);
+      })
+      .on("mouseout", function (d) {
+        d3.select(this).transition()
+          .duration(300)
+          .attr("d", arc);
+        
+      })
 
-    g.append("text")
+    group.append("text")
       .attr("transform", function (d) { return "translate(" + labelArc.centroid(d) + ")"; })
       .attr("dy", ".35em")
       .text(function (d) { return d.data; });
@@ -129,7 +145,7 @@ class App extends Component {
     let dataArr = this.state.fakeDataArr.sort((a, b) => a - b); // sorts the data highest to lowest
     let bar = d3.scaleLinear()
       .domain([0, d3.max(dataArr)])
-      .range([0, 500]); //this is the height of the chart.
+      .range([0, 200]); //this is the height of the chart.
     d3.select('.App')
       .selectAll('div')
       .data(dataArr)
@@ -177,6 +193,7 @@ class App extends Component {
     if (this.state.fakeDataArr !== prevState.fakeDataArr && this.state.currentData === prevState.currentData) {
       console.log('updating chart');
       this.createBarChart();
+      this.createPieChart();
     }
   }
 
