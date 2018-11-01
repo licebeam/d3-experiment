@@ -14,10 +14,13 @@ const Container = styled.div`
     style-bar{
       background-color: black;
       flex: 1;
-      padding: 10px;
       border: 1px solid white;
       margin: 4px;
       transform: scaleY(-1);
+      justify-content: middle;
+      vertical-align: middle;
+      text-align: center;
+      padding: 20px;
     }
   }
    .data{
@@ -30,13 +33,17 @@ const Container = styled.div`
     }
 `
 class App extends Component {
-  state = {
-    fakeDataArr: [
-      1, 2, 3, 10, 20, 100, 1000, 25, 800,
-    ],
-    screenHeight: 100,
-    currentData: null
+  constructor(props) {
+    super(props)
+    this.state = {
+      fakeDataArr: [
+        1, 2, 3, 10, 20, 100, 1000, 25, 800,
+      ],
+      screenHeight: 100,
+      currentData: null
+    }
   }
+ 
   createBarChart = () => {
     var that = this // rebinds this to call state
     d3.select('.App').selectAll("style-bar").remove(); //removes old data and allows us to add new data
@@ -58,11 +65,12 @@ class App extends Component {
           .text(() => { return ''; });
       })
       .on("click", function (data) {
-       that.setState({currentData: data})
+       that.setNumber(data)
       })
   }
 
   setNumber = (data) => {
+    this.setState({ currentData: data })
     return data; //sets the number for the view
   }
 
@@ -77,20 +85,18 @@ class App extends Component {
     this.createBarChart();
   }
 
-  componentDidUpdate(prevState) {
-    // if (prevState.fakeDataArr !== this.state.fakeDataArr) {
-    //   console.log('updating chart');
-    //   this.createBarChart();
-    // }
+  componentDidUpdate(prevProps, prevState) {//REMEMBER TO USE BOTH ARGUMENTS
+    if (this.state.fakeDataArr !== prevState.fakeDataArr && this.state.currentData === prevState.currentData) {
+      console.log('updating chart');
+      this.createBarChart();
+    }
   }
 
   render() {
     
     return (
       <Container>
-        <div className="App">
-
-        </div>
+        <div className="App"/>
         <div className ='data'>{this.state.currentData}</div>
         <button onClick={() => this.addItemToChart()}>Add Item</button>
       </Container>
