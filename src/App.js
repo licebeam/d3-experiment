@@ -10,6 +10,7 @@ const Container = styled.div`
     color: white;
     font-size: .8rem;
     transform: scaleY(-1);
+    border: 2px solid black;
     style-bar{
       background-color: black;
       flex: 1;
@@ -17,9 +18,6 @@ const Container = styled.div`
       border: 1px solid white;
       margin: 4px;
       transform: scaleY(-1);
-      &:hover{
-        background-color: grey;
-      }
     }
   }
 `
@@ -40,8 +38,16 @@ class App extends Component {
       .selectAll('div')
       .data(dataArr)
       .enter().append('style-bar')
-      .style('height', (data) =>  { return bar(data) + 'px'; }) //the length of the bar chart.
-      .text((data) => { return this.setNumber(data); });
+      .style('height', (data) => { return bar(data) + 'px'; }) //the length of the bar chart.
+      .on("mouseover", function () {
+        d3.select(this).style('background-color', 'red')
+          .text((data) => { return data; });
+      })
+      .on("mouseout", function () {
+        d3.select(this).style('background-color', 'black')
+          .text(() => { return ''; });
+      })
+      // .text((data) => { return this.setNumber(data); });
   }
 
   setNumber = (data) => {
