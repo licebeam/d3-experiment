@@ -23,12 +23,16 @@ const Container = styled.div`
       background-color: blueviolet;
       flex: 1;
       border: 1px solid darkblue;
-      margin: 4px;
+      margin: 2px;
       transform: scaleY(-1);
       justify-content: middle;
       vertical-align: middle;
       text-align: center;
       padding: 20px;
+      transition: .2s all;
+      &:hover{
+        flex: 1.2;
+      }
     }
   }
    .data{
@@ -39,6 +43,25 @@ const Container = styled.div`
       font-size: 2rem;
       height: 100px;
     }
+    .button-container{
+      height: 120px;
+      .add-button{
+      width: 100px;
+      height: 40px;
+      border-radius: 18px;
+      margin: 40px;
+      border: none;
+      background: blueviolet;
+      color: white;
+      transition: .2s all;
+      &:hover{
+        width: 110px;
+        height: 50px;
+        background-color: orange;
+      }
+    }
+    }
+    
 `
 class App extends Component {
   constructor(props) {
@@ -83,10 +106,13 @@ class App extends Component {
   }
 
   addItemToChart = () => {
-    console.log('adding item')
-    this.setState({
-      fakeDataArr: Object.assign([], this.state, [...this.state.fakeDataArr, 100 ])
-   }) 
+    if (this.state.fakeDataArr.length < 20) {
+      console.log('adding item')
+      const randomNumber = Math.floor(Math.random() * 1000)
+      this.setState({
+        fakeDataArr: Object.assign([], this.state, [...this.state.fakeDataArr, randomNumber])
+      }) 
+    }
   }
 
   componentDidMount() {
@@ -104,9 +130,13 @@ class App extends Component {
     
     return (
       <Container>
-        <div className="App"/>
+        <div className='button-container'>
+          <button className='add-button' onClick={() => this.addItemToChart()}>Add Item</button>
+        </div>
+        
+        <div className="App" />
+        
         <div className ='data'>{this.state.currentData}</div>
-        <button onClick={() => this.addItemToChart()}>Add Item</button>
       </Container>
     );
   }
