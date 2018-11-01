@@ -20,15 +20,25 @@ const Container = styled.div`
       transform: scaleY(-1);
     }
   }
+   .data{
+      border: 2px solid black;
+      padding: 10px; 
+      margin-top: 10px;
+      text-align: center;
+      font-size: 2rem;
+      height: 100px;
+    }
 `
 class App extends Component {
   state = {
     fakeDataArr: [
       1, 2, 3, 10, 20, 100, 1000, 25, 800,
     ],
-    screenHeight: 100
+    screenHeight: 100,
+    currentData: null
   }
   createBarChart = () => {
+    var that = this // rebinds this to call state
     d3.select('.App').selectAll("style-bar").remove(); //removes old data and allows us to add new data
     let dataArr = this.state.fakeDataArr.sort((a, b) => a - b); // sorts the data highest to lowest
     let bar = d3.scaleLinear()
@@ -47,7 +57,9 @@ class App extends Component {
         d3.select(this).style('background-color', 'black')
           .text(() => { return ''; });
       })
-      // .text((data) => { return this.setNumber(data); });
+      .on("click", function (data) {
+       that.setState({currentData: data})
+      })
   }
 
   setNumber = (data) => {
@@ -66,10 +78,10 @@ class App extends Component {
   }
 
   componentDidUpdate(prevState) {
-    if (prevState.fakeDataArr !== this.state.fakeDataArr) {
-      console.log('updating chart');
-      this.createBarChart();
-    }
+    // if (prevState.fakeDataArr !== this.state.fakeDataArr) {
+    //   console.log('updating chart');
+    //   this.createBarChart();
+    // }
   }
 
   render() {
@@ -79,6 +91,7 @@ class App extends Component {
         <div className="App">
 
         </div>
+        <div className ='data'>{this.state.currentData}</div>
         <button onClick={() => this.addItemToChart()}>Add Item</button>
       </Container>
     );
